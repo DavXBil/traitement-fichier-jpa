@@ -1,8 +1,10 @@
 import bo.Categorie;
+import bo.Ingredient;
 import bo.Marque;
 import bo.Produit;
 import dal.CategorieDAO;
 import dal.DALException;
+import dal.IngredientDAO;
 import dal.MarqueDAO;
 
 
@@ -12,8 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TestJPA {
 
@@ -21,23 +22,23 @@ public class TestJPA {
 
         CategorieDAO catDao = new CategorieDAO();
         MarqueDAO marqueDao = new MarqueDAO();
+        IngredientDAO ingredientDao = new IngredientDAO();
 
         Path path = Paths.get("src/main/resources/open-food-facts.csv");
 
         List<String[]> products = readCsv(path);
 
+        Ingredient ingredient = null;
+
         for (String[] s : products) {
 
             if (s.length == 30) {
 
-                String[] ingredients = s[4].split(",");
-
+                List<String> ingredients = List.of(s[4].split(","));
                 Produit newProduit = new Produit();
                 Categorie categorie = catDao.selectByLibelle(s[0]);
                 Marque marque = marqueDao.selectByLibelle(s[1]);
 
-                newProduit.setNom(s[2]);
-                newProduit.setGradeNutritionnel(s[3]);
 
                 if (categorie == null) {
 
@@ -54,8 +55,28 @@ public class TestJPA {
                     marqueDao.create(marq);
                 }
 
+                Set<Ingredient> produitIngredients = new HashSet<Ingredient>();
+
+                for (String i : ingredients) {
+
+                    if (i.length() <= 255) {
+                        ingredient = ingredientDao.selectByLibelle(i);
+
+                        if (ingredient == null) {
+                            Ingredient ing = new Ingredient();
+                            ing.setLibelle(i);
+                            ingredientDao.create(ing);
+                        }
+                    }
+                    produitIngredients.add(ingredient);
+                }
+
+
+                newProduit.setNom(s[2]);
+                newProduit.setGradeNutritionnel(s[3]);
                 newProduit.setCategorie(categorie);
                 newProduit.setMarque(marque);
+                newProduit.setIngredients(produitIngredients);
 
                 System.out.println(newProduit);
 

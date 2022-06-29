@@ -21,4 +21,26 @@ public class Ingredient {
         this.id = id;
     }
 
+    public Ingredient() {
+    }
+
+    public Ingredient(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Ingredient{");
+        sb.append("libelle='").append(libelle).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
