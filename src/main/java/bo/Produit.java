@@ -28,12 +28,12 @@ public class Produit {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name="nom")
+    private String nom;
 
-    @Column(name= "grade_nutritionnel")
-    private String gradeNutritionnel;
-    @Column(name= "donnees_nutritionnelles")
-    private String donneesNutritionnelles;
-
+    @ManyToOne
+    @JoinColumn(name = "categorie_id")
+    private Categorie categorie;
     @ManyToOne
     @JoinColumn(name = "marque_id")
     private Marque marque;
@@ -44,6 +44,11 @@ public class Produit {
             joinColumns = @JoinColumn(name = "produit_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredients_id"))
     private Set<Ingredient> ingredients = new LinkedHashSet<>();
+    @Column(name= "grade_nutritionnel")
+    private String gradeNutritionnel;
+    @Column(name= "donnees_nutritionnelles")
+    private String donneesNutritionnelles;
+
 
     @ManyToMany
     @JoinTable(name = "Produit_allergenes",
@@ -57,9 +62,43 @@ public class Produit {
             inverseJoinColumns = @JoinColumn(name = "additifs_id"))
     private Set<Additif> additifs = new LinkedHashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "categorie_id")
-    private Categorie categorie;
+
+    public Produit() {
+    }
+
+    public Produit(String gradeNutritionnel, String donneesNutritionnelles, Marque marque, Set<Ingredient> ingredients, Set<Allergene> allergenes, Set<Additif> additifs, Categorie categorie) {
+        this.gradeNutritionnel = gradeNutritionnel;
+        this.donneesNutritionnelles = donneesNutritionnelles;
+        this.marque = marque;
+        this.ingredients = ingredients;
+        this.allergenes = allergenes;
+        this.additifs = additifs;
+        this.categorie = categorie;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getGradeNutritionnel() {
+        return gradeNutritionnel;
+    }
+
+    public void setGradeNutritionnel(String gradeNutritionnel) {
+        this.gradeNutritionnel = gradeNutritionnel;
+    }
+
+    public String getDonneesNutritionnelles() {
+        return donneesNutritionnelles;
+    }
+
+    public void setDonneesNutritionnelles(String donneesNutritionnelles) {
+        this.donneesNutritionnelles = donneesNutritionnelles;
+    }
 
     public Categorie getCategorie() {
         return categorie;
@@ -102,13 +141,26 @@ public class Produit {
         this.ingredients = ingredients;
     }
 
-
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Produit{");
+        sb.append(", nom='").append(nom).append('\'');
+        sb.append("categorie=").append(categorie);
+        sb.append(", marque=").append(marque);
+        sb.append(", ingredients=").append(ingredients);
+        sb.append(", gradeNutritionnel='").append(gradeNutritionnel).append('\'');
+        sb.append(", donneesNutritionnelles='").append(donneesNutritionnelles).append('\'');
+        sb.append(", allergenes=").append(allergenes);
+        sb.append(", additifs=").append(additifs);
+        sb.append('}');
+        return sb.toString();
     }
 }

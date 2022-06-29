@@ -47,4 +47,12 @@ public class Categorie {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Categorie{");
+        sb.append(", libelle='").append(libelle).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

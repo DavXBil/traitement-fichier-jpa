@@ -1,15 +1,17 @@
 package dal;
 
+import bll.ConnectionManager;
 import bo.Categorie;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class CategorieDAO implements DAO<Categorie>{
 
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("food-jpa");
+    private final EntityManagerFactory emf = ConnectionManager.getInstance().getEmf();
     private final EntityManager em = emf.createEntityManager();
 
 
@@ -46,13 +48,8 @@ public class CategorieDAO implements DAO<Categorie>{
 
     public Categorie selectByLibelle(String libelle) throws DALException {
 
-        try {
-
-            return em.createQuery("SELECT c FROM Categorie c where c.libelle =" + libelle, Categorie.class).setMaxResults(1).getSingleResult();
-
-        } catch (Exception e) {
-            System.out.println((e.getMessage()));
-        }
-        return null;
+        TypedQuery<Categorie> query = em.createQuery("select e from Categorie e where e.libelle = :libelle", Categorie.class);
+        query.setParameter("libelle", libelle);
+        return query.getResultList().size() > 0 ? query.getResultList().get(0) : null;
     }
 }

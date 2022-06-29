@@ -1,4 +1,5 @@
 import bo.Categorie;
+import bo.Produit;
 import dal.CategorieDAO;
 import dal.DALException;
 
@@ -27,24 +28,37 @@ public class TestJPA {
 
         for (String[] s : products) {
 
-
-
             if (s.length == 30) {
 
                 String[] ingredients = s[4].split(",");
 
-                System.out.println(catDao.selectByLibelle(s[0]));
+                Produit newProduit = new Produit();
 
-                if (s[0].equals(catDao.selectByLibelle(s[0]))) {
+                Categorie categorie = catDao.selectByLibelle(s[0]);
 
-                } else {
+                newProduit.setNom(s[2]);
+                newProduit.setGradeNutritionnel(s[3]);
+
+
+
+                if (categorie == null) {
 
                     Categorie cat = new Categorie();
                     cat.setLibelle(s[0]);
 
                     catDao.create(cat);
-
                 }
+
+                //System.out.println(catDao.selectByLibelle(s[0]).toString());
+                newProduit.setCategorie(categorie);
+
+                System.out.println(newProduit);
+
+                /*if (s[0].equals(catDao.selectByLibelle(s[0]))) {
+
+                } else {*/
+
+                //}
 
 
                 /*for (String ingredient: ingredients) {
@@ -73,6 +87,8 @@ public class TestJPA {
             arrayLines.add(line);
 
         }
+
+        arrayLines.remove(0);
 
 
         return arrayLines;

@@ -1,5 +1,6 @@
 package dal;
 
+import bll.ConnectionManager;
 import bo.Produit;
 
 import javax.persistence.EntityManager;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class ProduitDAO implements DAO<Produit> {
 
-    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("food-jpa");
+    private final EntityManagerFactory emf = ConnectionManager.getInstance().getEmf();
     private final EntityManager em = emf.createEntityManager();
 
 
