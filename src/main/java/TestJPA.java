@@ -1,10 +1,11 @@
 import bo.Categorie;
+import bo.Marque;
 import bo.Produit;
 import dal.CategorieDAO;
 import dal.DALException;
+import dal.MarqueDAO;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -12,15 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class TestJPA {
 
     public static void main(String[] args) throws IOException, URISyntaxException, DALException {
 
         CategorieDAO catDao = new CategorieDAO();
+        MarqueDAO marqueDao = new MarqueDAO();
 
         Path path = Paths.get("src/main/resources/open-food-facts.csv");
 
@@ -33,13 +33,11 @@ public class TestJPA {
                 String[] ingredients = s[4].split(",");
 
                 Produit newProduit = new Produit();
-
                 Categorie categorie = catDao.selectByLibelle(s[0]);
+                Marque marque = marqueDao.selectByLibelle(s[1]);
 
                 newProduit.setNom(s[2]);
                 newProduit.setGradeNutritionnel(s[3]);
-
-
 
                 if (categorie == null) {
 
@@ -49,22 +47,17 @@ public class TestJPA {
                     catDao.create(cat);
                 }
 
-                //System.out.println(catDao.selectByLibelle(s[0]).toString());
+                if (marque == null) {
+                    Marque marq = new Marque();
+                    marq.setLibelle(s[1]);
+
+                    marqueDao.create(marq);
+                }
+
                 newProduit.setCategorie(categorie);
+                newProduit.setMarque(marque);
 
                 System.out.println(newProduit);
-
-                /*if (s[0].equals(catDao.selectByLibelle(s[0]))) {
-
-                } else {*/
-
-                //}
-
-
-                /*for (String ingredient: ingredients) {
-                System.out.println(ingredient);
-
-                }*/
 
 
             }
@@ -78,8 +71,6 @@ public class TestJPA {
 
         List<String[]> arrayLines = new ArrayList<>();
 
-
-
         for (String e: lines) {
 
             String[] line = e.split("\\|");
@@ -88,6 +79,7 @@ public class TestJPA {
 
         }
 
+        //Retrait de la ligne
         arrayLines.remove(0);
 
 
