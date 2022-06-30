@@ -15,8 +15,10 @@ public class OpenFoodFactService {
     AllergeneDAO allergeneDAO = new AllergeneDAO();
     AdditifDAO additifDAO = new AdditifDAO();
 
+    ProduitDAO produitDAO = new ProduitDAO();
 
-    public Produit read(String[] produit) throws DALException {
+
+    public void read(String[] produit) throws DALException {
 
         Ingredient ingredient = null;
         Allergene allergene = null;
@@ -26,12 +28,14 @@ public class OpenFoodFactService {
 
             List<String> ingredients = List.of(produit[4].split(","));
             List<String> allergenes = List.of(produit[28].split(","));
+            List<String> additifs = List.of(produit[29].split(","));
             Produit newProduit = new Produit();
 
             Categorie categorie = setCategorie(produit[0]);
 
             Marque marque = setMarque(produit[1]);
 
+            System.out.println(produit[11].length());
 
 
             Set<Ingredient> produitIngredients = new HashSet<Ingredient>();
@@ -50,6 +54,7 @@ public class OpenFoodFactService {
             Set<Allergene> produitAllergenes = new HashSet<Allergene>();
             for (String a : allergenes) {
 
+
                 if (a.length() <= 255) {
 
                     allergene = setAllergene(a);
@@ -59,18 +64,70 @@ public class OpenFoodFactService {
                 }
             }
 
-            Set<Additif> produitAdditif = new HashSet<Additif>();
-            for (String a : allergenes) {
+            Set<Additif> produitAdditifs = new HashSet<Additif>();
+            for (String a : additifs) {
 
                 if (a.length() <= 255) {
 
                     additif = setAdditif(a);
 
-                    produitAdditif.add(additif);
+                    produitAdditifs.add(additif);
 
                 }
             }
 
+
+            if (isSet(produit[11])) {
+                newProduit.setVitA100g(produit[11]);
+            }
+            if (isSet(produit[12])) {
+                newProduit.setVitD100g(produit[12]);
+            }
+            if (isSet(produit[13])) {
+                newProduit.setVitE100g(produit[13]);
+            }
+            if (isSet(produit[14])) {
+                newProduit.setVitK100g(produit[14]);
+            }
+            if (isSet(produit[15])) {
+                newProduit.setVitC100g(produit[15]);
+            }
+            if (isSet(produit[16])) {
+                newProduit.setVitB1100g(produit[16]);
+            }
+            if (isSet(produit[17])) {
+                newProduit.setVitB2100g(produit[17]);
+            }
+            if (isSet(produit[18])) {
+                newProduit.setVitPP100g(produit[18]);
+            }
+            if (isSet(produit[19])) {
+                newProduit.setVitB6100g(produit[19]);
+            }
+            if (isSet(produit[20])) {
+                newProduit.setVitB9100g(produit[20]);
+            }
+            if (isSet(produit[21])) {
+                newProduit.setVitB12100g(produit[21]);
+            }
+            if (isSet(produit[22])) {
+                newProduit.setCalcium100g(produit[22]);
+            }
+            if (isSet(produit[23])) {
+                newProduit.setMagnesium100g(produit[23]);
+            }
+            if (isSet(produit[24])) {
+                newProduit.setIron100g(produit[24]);
+            }
+            if (isSet(produit[25])) {
+                newProduit.setFer100g(produit[25]);
+            }
+            if (isSet(produit[26])) {
+                newProduit.setBetaCarotene100g(produit[26]);
+            }
+            if (isSet(produit[27])) {
+                newProduit.setPresenceHuilePalme(produit[27]);
+            }
 
 
             newProduit.setNom(produit[2]);
@@ -84,31 +141,11 @@ public class OpenFoodFactService {
             newProduit.setFibres(produit[8]);
             newProduit.setProteines(produit[9]);
             newProduit.setSel(produit[10]);
-            newProduit.setVitA100g(produit[11]);
-            newProduit.setVitD100g(produit[12]);
-            newProduit.setVitE100g(produit[13]);
-            newProduit.setVitK100g(produit[14]);
-            newProduit.setVitC100g(produit[15]);
-            newProduit.setVitB1100g(produit[16]);
-            newProduit.setVitB2100g(produit[17]);
-            newProduit.setVitPP100g(produit[18]);
-            newProduit.setVitB6100g(produit[19]);
-            newProduit.setVitB9100g(produit[20]);
-            newProduit.setVitB12100g(produit[21]);
-            newProduit.setCalcium100g(produit[22]);
-            newProduit.setMagnesium100g(produit[23]);
-            newProduit.setIron100g(produit[24]);
-            newProduit.setFer100g(produit[25]);
-            newProduit.setBetaCarotene100g(produit[26]);
-            newProduit.setPresenceHuilePalme(produit[27]);
             newProduit.setAllergenes(produitAllergenes);
-            newProduit.setAdditifs(produitAdditif);
+            newProduit.setAdditifs(produitAdditifs);
 
-            return newProduit;
+            produitDAO.create(newProduit);
 
-        } else {
-
-            return null;
         }
 
     }
@@ -175,15 +212,25 @@ public class OpenFoodFactService {
         Additif additif = additifDAO.selectByLibelle(string);
 
         if (additif == null) {
-            Additif add = new Additif();
-            add.setLibelle(string);
 
-            additifDAO.create(add);
+            Additif addi = new Additif();
+
+            addi.setLibelle(string);
+
+            additifDAO.create(addi);
+
             additif = additifDAO.selectByLibelle(string);
+
         }
 
         return additif;
     }
 
+    public boolean isSet(String element) {
+
+        return element.length() > 0;
+
+
+    }
 
 }

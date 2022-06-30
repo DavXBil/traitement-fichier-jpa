@@ -23,7 +23,7 @@ public class AllergeneDAO implements DAO<Allergene> {
             em.persist(allergene);
             em.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println((e.getMessage()));
+            throw new DALException("Erreur lors de la création de l'allergene", e);
         }
     }
 

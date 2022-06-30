@@ -20,7 +20,7 @@ import java.util.*;
 
 public class TestJPA {
 
-    public static void main(String[] args) throws IOException, URISyntaxException, DALException {
+    public static void main(String[] args) throws IOException, DALException {
 
         OpenFoodFactService service = new OpenFoodFactService();
 
@@ -33,9 +33,11 @@ public class TestJPA {
 
         for (String[] s : produits) {
 
-            Produit produit = service.read(s);
+            service.read(s);
 
-            System.out.println(produit);
+
+
+
 
         }
 

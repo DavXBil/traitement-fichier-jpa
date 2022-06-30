@@ -2,8 +2,7 @@ package dal;
 
 import bll.ConnectionManager;
 import bo.Additif;
-import bo.Categorie;
-import bo.Marque;
+import bo.Allergene;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,7 +21,7 @@ public class AdditifDAO implements DAO<Additif> {
             em.persist(additif);
             em.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println((e.getMessage()));
+            throw new DALException("Erreur lors de la création de l'additif", e);
         }
     }
 

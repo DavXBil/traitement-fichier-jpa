@@ -20,7 +20,7 @@ public class ProduitDAO implements DAO<Produit> {
             em.persist(produit);
             em.getTransaction().commit();
         } catch (Exception e) {
-            throw new DALException(e.getMessage());
+            throw new DALException("Erreur lors de la création du produit", e);
         }
 
     }

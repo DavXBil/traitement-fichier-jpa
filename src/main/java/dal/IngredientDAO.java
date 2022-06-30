@@ -21,7 +21,7 @@ public class IngredientDAO implements DAO<Ingredient> {
             em.persist(ingredient);
             em.getTransaction().commit();
         } catch (Exception e) {
-            System.out.println((e.getMessage()));
+            throw new DALException("Erreur lors de la création de l'ingrédient", e);
         }
     }
 
