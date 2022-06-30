@@ -51,7 +51,7 @@ public class Categorie {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Categorie{");
-        sb.append(", libelle='").append(libelle).append('\'');
+        sb.append("libelle='").append(libelle).append('\'');
         sb.append('}');
         return sb.toString();
     }

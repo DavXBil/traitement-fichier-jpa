@@ -41,4 +41,11 @@ public class Marque {
         this.libelle = libelle;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Marque{");
+        sb.append("libelle='").append(libelle).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

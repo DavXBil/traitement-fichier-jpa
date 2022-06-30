@@ -1,3 +1,5 @@
+import bll.FileManager;
+import bll.OpenFoodFactService;
 import bo.Categorie;
 import bo.Ingredient;
 import bo.Marque;
@@ -20,91 +22,22 @@ public class TestJPA {
 
     public static void main(String[] args) throws IOException, URISyntaxException, DALException {
 
-        CategorieDAO catDao = new CategorieDAO();
-        MarqueDAO marqueDao = new MarqueDAO();
-        IngredientDAO ingredientDao = new IngredientDAO();
+        OpenFoodFactService service = new OpenFoodFactService();
+
 
         Path path = Paths.get("src/main/resources/open-food-facts.csv");
 
-        List<String[]> products = readCsv(path);
 
-        Ingredient ingredient = null;
-
-        for (String[] s : products) {
-
-            if (s.length == 30) {
-
-                List<String> ingredients = List.of(s[4].split(","));
-                Produit newProduit = new Produit();
-                Categorie categorie = catDao.selectByLibelle(s[0]);
-                Marque marque = marqueDao.selectByLibelle(s[1]);
+        List<String[]> produits = FileManager.readCsv(path);
 
 
-                if (categorie == null) {
+        for (String[] s : produits) {
 
-                    Categorie cat = new Categorie();
-                    cat.setLibelle(s[0]);
+            Produit produit = service.read(s);
 
-                    catDao.create(cat);
-                }
-
-                if (marque == null) {
-                    Marque marq = new Marque();
-                    marq.setLibelle(s[1]);
-
-                    marqueDao.create(marq);
-                }
-
-                Set<Ingredient> produitIngredients = new HashSet<Ingredient>();
-
-                for (String i : ingredients) {
-
-                    if (i.length() <= 255) {
-                        ingredient = ingredientDao.selectByLibelle(i);
-
-                        if (ingredient == null) {
-                            Ingredient ing = new Ingredient();
-                            ing.setLibelle(i);
-                            ingredientDao.create(ing);
-                        }
-                    }
-                    produitIngredients.add(ingredient);
-                }
-
-
-                newProduit.setNom(s[2]);
-                newProduit.setGradeNutritionnel(s[3]);
-                newProduit.setCategorie(categorie);
-                newProduit.setMarque(marque);
-                newProduit.setIngredients(produitIngredients);
-
-                System.out.println(newProduit);
-
-
-            }
-        }
-
-    }
-
-    public static List<String[]> readCsv(Path path) throws IOException {
-
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-
-        List<String[]> arrayLines = new ArrayList<>();
-
-        for (String e: lines) {
-
-            String[] line = e.split("\\|");
-
-            arrayLines.add(line);
+            System.out.println(produit);
 
         }
-
-        //Retrait de la ligne
-        arrayLines.remove(0);
-
-
-        return arrayLines;
 
     }
 

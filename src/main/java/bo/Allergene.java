@@ -19,4 +19,22 @@ public class Allergene {
         this.id = id;
     }
 
+    public String getLibelle() {
+        return libelle;
+    }
+
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public Allergene() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Allergene{");
+        sb.append("libelle='").append(libelle).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
